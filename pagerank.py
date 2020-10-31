@@ -141,18 +141,20 @@ def iterate_pagerank(corpus, damping_factor):
         # iterate through pages in pageRank
         for page in pageRank:
             linking_prob = 0
-            
+
             for link in corpus.keys():
                 # chech if page is linked in the link
                 if page in corpus[link]:
                     # add to sum of probability that the surfer followed a link to the current page
                     linking_prob += pageRank[link] / len(corpus[link])
-            
-            # caculate total PR of current page
-            pageRank[page] = random_prob + damping_factor * linking_prob
 
+            # caculate total PR of current page
+            current_pr[page] = random_prob + damping_factor * linking_prob
+
+        
         # check if PageRank value changes by more than 0.001 between the current rank values and the new rank values
-        pr_delta = {key: pageRank[key]-current_pr[key] for key in pageRank}
+        pr_delta = {key: pageRank[key] - current_pr[key] for key in pageRank}
+        pageRank = current_pr
         repeat = False
         for page in pr_delta:
             if pr_delta[page] <= -0.001 or pr_delta[page] >= 0.001:
